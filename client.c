@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clinte.c                                           :+:      :+:    :+:   */
+/*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jpflegha <jpflegha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 13:40:53 by jpflegha          #+#    #+#             */
-/*   Updated: 2025/02/18 16:12:26 by jpflegha         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:04:19 by jpflegha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 volatile sig_atomic_t	g_server_status = BUSY;
 
-void	end_handler(int signo)
+void	end_handler(void)
 {
 	write(STDOUT_FILENO, "Message received\n", 17);
 	exit(EXIT_SUCCESS);
 }
 
-void	ack_handler(int signo)
+void	ack_handler(void)
 {
 	g_server_status = READY;
 }
@@ -55,7 +55,7 @@ int	main(int ac, char **av)
 	i = 0;
 	if (3 != ac)
 	{
-		printf("Usage: %s <server_pid> <string>\n", av[0]);
+		write(STDOUT_FILENO, "Usage: [server_pid] [message]\n", 31);
 		return (EXIT_FAILURE);
 	}
 	server = atoi(av[1]);

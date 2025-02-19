@@ -6,7 +6,7 @@
 /*   By: jpflegha <jpflegha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 13:41:34 by jpflegha          #+#    #+#             */
-/*   Updated: 2025/02/18 16:05:20 by jpflegha         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:25:50 by jpflegha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,24 @@ void	handler(int signo, siginfo_t *info, void *more_info)
 	if (SIGUSR1 == signo)
 		c |= (1 << i);
 	else if (SIGUSR2 == signo)
-		c &= ~(0 << i);
+		c &= ~(1 << i);
 	i++;
 	if (8 == i)
 	{
 		i = 0;
 		if ('\0' == c)
 		{
-			write(STDOUT_FILENO, "\n", 1);
-			kill(client_pid, SIGUSR2); // end
+            write(STDOUT_FILENO, "\n", 1);
 			c = 0;
+			kill(client_pid, SIGUSR2);
+            client_pid = 0;
 			return ;
 		}
-		write(STDERR_FILENO, &c, 1);
+		write(STDOUT_FILENO, &c, 1);
 		c = 0;
 	}
-	kill(client_pid, SIGUSR1); // ack
+	kill(client_pid, SIGUSR1);
+    
 }
 
 int	main(void)
